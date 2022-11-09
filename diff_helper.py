@@ -10,7 +10,6 @@ import json
 import difflib 
 import pandas as pd
 
-
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by the db_file
@@ -91,4 +90,44 @@ def printDiff(diff):
   """prints a diff line by line"""
   for line in diff:
     print(line)
+
+def get_all_code_files(df):
+    """gets a list of all the unique code files in the dataframe"""
+    df = load_df_from_db(database)
+    code_df = df[df.notes.str.startswith("code:")]
+    filenames = code_df.notes.str.split(" ").str[1].str.split(";").str[0].unique()
+    return filenames
+
+
+def get_code_states_on_output(df):
+    """
+    Take a dataframe and get the code state of each file every time the user tests the code (output produced)
+    Returns: DataFrame with a column for Time and a column for each file in a database. Every row is the time and code state for each time the code is tested 
+    """
+    code_files = get_all_code_files(df)
+
+    code_state = {x:"" for x in code_files} # set to empty
+    output_indexes = df[df.notes.str.startswith("output:")].index
+
+    all_rows = [] #going to append rows of data to this
+    for i in output_indexes:
+        df_slice = df.iloc[:i]
+        row_data = [] # going to append rows to this
+        row_data.append(df_slice.iloc[-1].time)
+        for codeFile in code_files:
+            file_slice = df_slice[df_slice.notes.str.startswith("code: "+codeFile+";")]
+            if file_slice.shape[0] > 0: #file has occurred
+                curr_code_state = file_slice.iloc[-1].code_text
+                #print(codeFile, curr_code_state)
+            else:
+                curr_code_state = ""
+            row_data.append(curr_code_state)
+        all_rows.append(row_data)
+    return pd.DataFrame(all_rows, columns= ["Time"]+code_files.tolist())
+
+if __name__ == "__main__":
+    database = "wordle_polished.db"
+    df = load_df_from_db(database)
+    output_df = get_code_states_on_output(df)
+    print(output_df)
 
