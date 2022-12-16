@@ -42,7 +42,8 @@ document.addEventListener('keydown', () => {
 - if keypress is a letter
   - update "letters" attribute
     - update tile markup based on "letters" value
-- if keypress is backspace
+    
+- if keypress is backspaceeee
   - delete last letter in “letters”
     - update tile markup based on "letters"
 */
@@ -52,5 +53,6 @@ document.addEventListener('keydown', () => {
 if __name__ == "__main__":
   diff = get_diff(before_code, after_code)
   printDiff(diff)
+  
   modified_lines = get_modified_lineNums(diff)
   print("modified lines:", len(modified_lines), ":", modified_lines)

@@ -6,9 +6,9 @@ import pandas as pd
 
 
 if __name__ == '__main__':
-    database = "wordle_polished.db"
+    database = "nodejsApp.db"
     df = load_df_from_db(database)
-    print("df: ", df)
+    # print("df: ", df)
     
     script_df = get_file_entries(df, "script.js")
     print("script_df", script_df)
