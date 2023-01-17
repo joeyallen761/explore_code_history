@@ -85,7 +85,7 @@ if __name__ == '__main__':
     # creating the heatmap from the df_scriptjs_lastentry dataframe
     fig, ax = plt.subplots(figsize=(7,9))
     cmap = sns.light_palette("red", as_cmap=True)
-    heatmap = sns.heatmap(df_scriptjs_lastentry,  xticklabels=True, yticklabels=True,  annot= np.asarray(all_last_entry).reshape(169,1), fmt = '', annot_kws = {"ha": 'left'}, cmap = cmap, ax=ax)
+    heatmap = sns.heatmap(df_scriptjs_lastentry,  xticklabels=True, yticklabels=True,  annot= np.asarray(all_last_entry).reshape(len(df_scriptjs_lastentry),1), fmt = '', annot_kws = {"ha": 'left'}, cmap = cmap, ax=ax)
     for t in heatmap.texts:
         trans = t.get_transform()
         offs = matplotlib.transforms.ScaledTranslation(-0.48, 0, 
